@@ -1,0 +1,6 @@
+include README.rst
+include LICENSE
+include requirements.txt
+recursive-include ckanext/jwt_issuer *.html *.json *.js *.less *.css *.mo *.yml
+recursive-include ckanext/jwt_issuer/migration *.ini *.py *.mako
+recursive-include ckanext/jwt_issuer/public *.*

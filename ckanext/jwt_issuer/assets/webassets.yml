@@ -1,0 +1,14 @@
+# jwt_issuer-js:
+#   filter: rjsmin
+#   output: ckanext-jwt_issuer/%(version)s-jwt_issuer.js
+#   contents:
+#     - js/jwt_issuer.js
+#   extra:
+#     preload:
+#       - base/main
+
+# jwt_issuer-css:
+#   filter: cssrewrite
+#   output: ckanext-jwt_issuer/%(version)s-jwt_issuer.css
+#   contents:
+#     - css/jwt_issuer.css
