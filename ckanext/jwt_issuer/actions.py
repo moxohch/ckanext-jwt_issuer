@@ -1,7 +1,7 @@
 import time
 import jwt
 import ckan.plugins.toolkit as tk
-from ckanext.jwt_issuer.services import get_organisations_and_roles_for_user
+from ckanext.jwt_issuer.services import get_datasets_and_permissions_for_user
 
 def jwt_issuer_token(context, data_dict):
     """
@@ -21,7 +21,7 @@ def jwt_issuer_token(context, data_dict):
 
     lifetime = ttl_default
 
-    user_organisations_summary = get_organisations_and_roles_for_user(user)
+    user_datasets_permissions = get_datasets_and_permissions_for_user(user)
 
     now = int(time.time())
     payload = {
@@ -30,7 +30,7 @@ def jwt_issuer_token(context, data_dict):
         "sub": user,
         "iat": now,
         "exp": now + lifetime,
-        "user_organizations": user_organisations_summary,
+        "permissions": user_datasets_permissions,
     }
 
     token = jwt.encode(payload, secret, algorithm="HS256")

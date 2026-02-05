@@ -1,15 +1,34 @@
 import ckan.plugins.toolkit as tk
 
+def get_datasets_and_permissions_for_user(username):
+    """
+    returns dict { dataset_id: ["read", "write"] }
+    includes all public datasets (read) and organization datasets (read/write).
+    """
+    datasets_payload = {}
+    context = {'user': username}
 
-def get_organisations_and_roles_for_user(username):
-    
-    # get organizations the user belongs to
-    user_orgs = tk.get_action('organization_list_for_user')(
-        {'user': username}, 
-    )
-    
-    orgs_payload = {}
-    for org in user_orgs:
-        orgs_payload[org['name']] = org['capacity']
-        
-    return orgs_payload
+    # Retrieve all datasets the user can see (public + their private)
+    try:
+        search_results = tk.get_action('package_search')(context, {
+            'include_private': True,
+        })
+    except Exception:
+        return {}
+
+    for pkg in search_results.get('results', []):
+        pkg_id = pkg['id']
+        # By default, if the dataset appears here, the user has at least 'read' permission
+        permissions = ['r']
+
+        # Check if the user has the right to modify the package, which means they are at least editor
+        try:
+            can_update = tk.check_access('package_update', context, {'id': pkg_id})
+            if can_update:
+                permissions.append('w')
+        except tk.NotAuthorized:
+            pass
+
+        datasets_payload[pkg_id] = permissions
+
+    return datasets_payload
