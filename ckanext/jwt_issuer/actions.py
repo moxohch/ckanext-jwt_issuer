@@ -30,7 +30,8 @@ def jwt_issuer_token(context, data_dict):
         "sub": user,
         "iat": now,
         "exp": now + lifetime,
-        "permissions": user_datasets_permissions,
+        "r": user_datasets_permissions["r"],
+        "w": user_datasets_permissions["w"],
     }
 
     token = jwt.encode(payload, secret, algorithm="HS256")

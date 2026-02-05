@@ -1,34 +1,34 @@
 import ckan.plugins.toolkit as tk
 
 def get_datasets_and_permissions_for_user(username):
-    """
-    returns dict { dataset_id: ["read", "write"] }
-    includes all public datasets (read) and organization datasets (read/write).
-    """
-    datasets_payload = {}
+    r_list = [] # read ONLY
+    w_list = [] # write (+ read)
     context = {'user': username}
 
-    # Retrieve all datasets the user can see (public + their private)
     try:
         search_results = tk.get_action('package_search')(context, {
             'include_private': True,
+            'rows': 10000 # default is 1000, we want to be sure to get all datasets
         })
     except Exception:
-        return {}
+        return {"r": [], "w": []}
 
     for pkg in search_results.get('results', []):
         pkg_id = pkg['id']
-        # By default, if the dataset appears here, the user has at least 'read' permission
-        permissions = ['r']
-
-        # Check if the user has the right to modify the package, which means they are at least editor
+        
+        # first test write access
         try:
-            can_update = tk.check_access('package_update', context, {'id': pkg_id})
-            if can_update:
-                permissions.append('w')
+            if tk.check_access('package_update', context, {'id': pkg_id}):
+                w_list.append(pkg_id)
+                continue # move to the next dataset, no need to add it to 'r' to avoid duplication
         except tk.NotAuthorized:
             pass
 
-        datasets_payload[pkg_id] = permissions
+        # if we get here, the user does not have 'w' rights. 
+        # but since it is in the search results, they necessarily have 'r' rights.
+        r_list.append(pkg_id)
 
-    return datasets_payload
+    return {
+        "r": r_list,
+        "w": w_list
+    }
