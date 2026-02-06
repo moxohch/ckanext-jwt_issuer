@@ -8,9 +8,7 @@ def jwt_issuer_token(context, data_dict):
     POST /api/action/jwt_issuer_token
     """
     user = context.get("user")
-    if not user:
-        tk.abort(401, "Not authenticated")
-
+    
     secret = tk.config.get("ckanext.jwt_issuer.secret")
     if not secret:
         tk.abort(500, "Missing config: ckanext.jwt_issuer.secret")
@@ -27,7 +25,7 @@ def jwt_issuer_token(context, data_dict):
     payload = {
         "iss": issuer,
         "aud": audience,
-        "sub": user,
+        "sub": user if user else "anonymous",
         "iat": now,
         "exp": now + lifetime,
         "r": user_datasets_permissions["r"],
