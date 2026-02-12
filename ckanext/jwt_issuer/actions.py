@@ -36,3 +36,8 @@ def jwt_issuer_token(context, data_dict):
 
     return {"token": token, "expires_in": lifetime}
 
+def jwt_issuer_token_auth(context, data_dict):
+    """
+    This auth function allows the jwt_issuer_token action to be called by anonymous users.
+    """
+    return {'success': True}

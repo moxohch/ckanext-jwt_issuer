@@ -7,6 +7,7 @@ from ckanext.jwt_issuer import actions
 class JwtIssuerPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IActions)
+    plugins.implements(plugins.IAuthFunctions)
     
 
     # IConfigurer
@@ -21,4 +22,7 @@ class JwtIssuerPlugin(plugins.SingletonPlugin):
             "jwt_issuer_token": actions.jwt_issuer_token,
         }
 
-    
+    def get_auth_functions(self):
+        return {
+            "jwt_issuer_token": actions.jwt_issuer_token_auth,
+        }

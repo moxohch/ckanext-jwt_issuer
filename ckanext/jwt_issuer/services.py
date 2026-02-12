@@ -14,14 +14,14 @@ def get_datasets_and_permissions_for_user(username):
         return {"r": [], "w": []}
 
     for pkg in search_results.get('results', []):
-        pkg_id = pkg['id']
+        pkg_id = pkg.get('id')
         
         # first test write access
         try:
             if tk.check_access('package_update', context, {'id': pkg_id}):
                 w_list.append(pkg_id)
                 continue # move to the next dataset, no need to add it to 'r' to avoid duplication
-        except tk.NotAuthorized:
+        except Exception:
             pass
 
         # if we get here, the user does not have 'w' rights. 

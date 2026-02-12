@@ -17,9 +17,5 @@ setup(
             ('**.js', 'javascript', None),
             ('**/templates/**.html', 'ckan', None),
         ],
-    },
-    entry_points="""
-    [ckan.plugins]
-    jwt_issuer=ckanext.jwt_issuer.plugin:JwtIssuerPlugin
-    """,
+    }
 )
