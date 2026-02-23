@@ -1,4 +1,4 @@
-[![Tests](https://github.com/moxohch/ckanext-jwt_issuer/workflows/Tests/badge.svg?branch=main)](https://github.com/moxohch/ckanext-jwt_issuer/actions)
+[![Tests](https://github.com/moxohch/ckanext-jwt_issuer/workflows/Tests/badge.svg?branch=develop)](https://github.com/moxohch/ckanext-jwt_issuer/actions)
 
 ## ckanext-jwt_issuer
 
@@ -31,7 +31,7 @@ Compatibility with core CKAN versions:
 1. Add the extension to your CKAN image, for example in your `Dockerfile`:
 
    ```bash
-   RUN pip3 install --no-cache-dir -e git+https://github.com/moxohch/ckanext-jwt_issuer.git@main#egg=ckanext-jwt_issuer
+   RUN pip3 install --no-cache-dir -e git+https://github.com/moxohch/ckanext-jwt_issuer.git@develop#egg=ckanext-jwt_issuer
    ```
 
 2. Enable the plugin via environment variable:
